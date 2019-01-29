@@ -3,6 +3,7 @@
 ### 一. 快速了解fisco-bcos 2.0
 #### 【快速体验】
 1. 如何快速体验fisco-bcos 2.0？  
+
    可以参考资料[《快速部署fisco-bcos 2.0》](https://www.baidu.com)
 
 2. fisco 1.3和2.0有什么大的差异？  
