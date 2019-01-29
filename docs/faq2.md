@@ -1,24 +1,25 @@
 #   FAQ：
 
 ### 一. 快速了解fisco-bcos 2.0
-#### 【快速体验fisco-bcos 2.0】
+#### 【快速体验】
 1. 如何快速体验fisco-bcos 2.0？  
    可以参考资料[《快速部署fisco-bcos 2.0》](https://www.baidu.com)
-#### 【fisco-bcos 2.0特性】
-1. fisco 1.3和2.0有什么大的差异？  
+
+2. fisco 1.3和2.0有什么大的差异？  
    2.0增加了多群组、分布式存储等重要特性，在性能等方面进行了较大的优化。
 
-2. fisco2.0支持哪些版本？  
+3. fisco2.0支持哪些版本？  
    普通版本，国密版本，暂不支持群环签名版本。
 
-3. 有哪些接口能力可以调用 fisco-bcos 2.0？  
+4. 有哪些接口能力可以调用 fisco-bcos 2.0？  
    1）rpc接口：使用简便，搭链完成后可以直接通过curl命令发送请求。  
    2）控制台：功能比rpc接口强大，需要下载配置web3sdk。  
    3）web3sdk：功能最强大，可以调用合约，开发区块链应用必选。  
 
-4. 有哪几种褡裢方式，各有什么特点？  
+5. 有哪几种褡裢方式，各有什么特点？  
    一键褡裢：使用更简单，适合入门小白和第一次用2.0的同学  
    物料包：用法更灵活，适合熟悉fisco-bcos的用户和企业搭链用户。
+
 #### 【软硬件依赖】
 ```eval_rst
 +----------+---------+---------------------------------------------+
@@ -47,6 +48,7 @@
 #### 【共识算法】
 1. fisco 2.0支持哪些共识算法？  
    pbft和raft。
+
 2. 什么是Raft算法？  
    RAFT算法采用2F+1<=N算法来计算冗余；其中F表示加入和合约组网中节点进程挂起或者僵尸数，N代表group内记账列表内节点总数，满足对应算法后，系统能正常的共识、同步和出快；
 
@@ -54,24 +56,31 @@
    在使用build_chain.sh脚本搭建group后，需要在节点进程启动前修改group.X.genesis文件的consensus_type为raft。
 
 4. 在Raft算法的环境中只有leader才会出块，当group下节点较多时，如何快速找到leader节点？  
-   进入控制台执行getConsensusStatus(gcs) 命令，可以通过leaderId和leaderIdx快速的查出当前group下那个节点是leader。  
+   进入控制台执行getConsensusStatus(gcs) 命令，可以通过leaderId和leaderIdx快速的查出当前group下那个节点是leader。
+
 #### 【安全控制】
 1. fisco 2.0有哪些安全控制机制？  
    网络准入、权限控制、CA黑名单。
+
 2. 2.0节点准入机制是什么？  
    2.0引入group即账本概念，节点分为group节点和网络节点两种。只有成为group节点才能参与共识和出块，要成为group节点的前提是成为链所在网中的网络节点。
+
 3. group下观察节点和记账节点的区别是？  
    观察节点作为group账本下的观察者，能被动同步出块节点的数据，但是没有权限作为出块节点。记账节点除了具有观察者权限，还具有作为出块者的权限。
+
 4. 新节点扩容加入链网络启动失败报错：conf/group.2.genesis:can not open file？  
    对于新节点，报类似无法打开文件的错误，节点启动首先会初始化config.ini配置，这种错误一般是读取到config.ini有配置conf/group.2.genesis，但是实际上目录下没有这个文件导致。
 一般节点要加入哪个组，config.ini就配置哪个组，上述报错是因为额外配置了group.2.genesis。直接在config.ini删除该行配置。
+
 5. 节点黑名单设置导致链无法正常出块？  
    2.0节点黑名单管理实现指定节点之间连接开放与限制，两个节点设置黑名单后，此两节点间无法通信和共识，可能导致链无法正常运行。
+
 6. 4个节点，A B C 三个节点依次设置黑名单，导致链出块异常？  
    原因是节点间转发机制异常，需要在conf下设置group.1.ini配置增加ttl参数。
 #### 【存储】
 1. fisco-bcos 2.0支持哪几种存储方式？  
    mptstate和storagestate两种，mptstate就是1.3版本默克尔树的存储方式，storagestate是2.0新增的分布式存储，支持leveldb和mysql数据库。
+
 2. storagestate有什么优点？  
    mptstate使用的默克尔树存储方式会随着数据量的增大速度越来越慢，而storagestate用的传统的存储方式，数据量增大并不会明显的影响性能，而且可以通过分库分表等方式优化。
 #### 【CNS】
@@ -98,15 +107,19 @@
 #### 【落盘加密】
 1. 落盘加密有什么优点？  
    安全。非法带出的加密数据没有私钥不会被破解。
+
 2. 是否支持部分节点落盘加密？  
    支持。
+
 3. fisco 2.0 运行过程中能否切换落盘加密？  
    不能直接切换，如果想切换需要清理调data数据，配置落盘加密，然后重头开始同步区块。
+
 4. 落盘加密是否支持国密？  
    支持，不过操作上略有不同，具体可以参考[《落盘加密文档》](https://www.baidu.com)。
 #### 【虚拟机与合约】
 1. fisco 2.0 的合约和1.3的合约有什么不同？  
-   fisco 2.0增加了precompile合约对表进行操作，适配分布式存储。  
+   fisco 2.0增加了precompile合约对表进行操作，适配分布式存储。
+
 2. fisco 2.0是否兼容fisco 1.3 的合约？  
    兼容。
 ### 三. 工具
@@ -114,6 +127,7 @@
 1. 有哪几种褡裢方式，各有什么特点？  
    一键褡裢：使用更简单，适合入门小白和第一次用2.0的同学  
    物料包：用法更灵活，适合熟悉fisco-bcos的用户和企业搭链用户。
+
 2. 一键褡裢和物料包是否支持国密？  
    一键褡裢支持国密（要添加-g参数）。物料包暂时不支持国密。
 #### 【配置】
@@ -135,7 +149,7 @@
    2）配置改后重启可改：[sync].idle_wait_ms，[tx_pool].limit
 
 5. 群组配置更改途径是什么？  
-   交易共识动态可改可以通过控制修改。控制台进入路径：  ~/web3sdk/dist/bin/web3sdk -c <groupID>, [consensus].max_trans_num，[tx].gas_limit使用接口setSystemConfigByKey(ssc)更改，对于的配置项为tx_count_limit，tx_gas_limit。具体参见ssc -h 。[consensus].node.X的更改涉及到节点管理，控制台接口涉及到addMiner(am)，addObserver(ao)，removeNode(rn)，具体参考《[节点管理]()》。
+   交易共识动态可改可以通过控制修改。控制台进入路径：  ~/web3sdk/dist/bin/web3sdk -c <groupID>, [consensus].max_trans_num，[tx].gas_limit使用接口setSystemConfigByKey(ssc)更改，对于的配置项为tx_count_limit，tx_gas_limit。具体参见ssc -h 。[consensus].node.X的更改涉及到节点管理，控制台接口涉及到addMiner(am)，addObserver(ao)，removeNode(rn)，具体参考[《节点管理》]()。
 
 6. 群组配置查询途径是什么？  
     交易共识动态可改群组配置项查询除了控制台外，还可以通过RPC接口查询。控制台详细使用方法请参考《SDK控制台》，RPC详细使用方法请参考《FISCO BCOS2.0 JSON-RPC 接口》。
@@ -145,18 +159,23 @@
 #### 【监控】
 1. fisco 2.0 提供了哪些监控工具？  
    搭链完成后会提供一个monitor.sh脚本，可以将其配置在定时任务中进行监控。除此之外可以搭建区块链浏览器进行监控。
+
 #### 【扩容】
 1. 扩容节点需要注意什么？  
    扩容后的节点需要先启动同步区块，等待区块同步完成之后再加入组网。
+
 #### 【升级】
 1. 是否支持从1.3或1.5升级到2.0版本？  
    不支持，由于版本差异较大，不支持大版本升级。
+
 2. 如何升级2.X版本？  
    直接停止所有区块链节点，替换编译好的fisco-bcos二进制文件，重新启动即可。
+
 ### 四. API
 #### 【RPC接口】
 1. RPC接口有什么优点？  
    搭建好区块链之后，可以只通过curl命令调用区块链接口，方便好用。
+
 2. RPC接口支持哪些功能？  
    支持查看区块链的信息，发送消息等，具体可以参考[《RPC接口文档》](https://www.baidu.com)
 #### 【控制台】
@@ -186,8 +205,10 @@
 
 9. 统一节点属于不同的group，是否可以支持查询多group的信息？  
    可以，在进入控制台时，输入要查看的groupID:  ./web3sdk -c [groupID]
+   
 #### 【java SDK】
 1. java要求的版本是？  
    oracle jdk 1.8（open jdk 1.8不符合要求）
+
 2. 首次配置完成，发送交易失败的最常见原因是什么？  
    applicationContext.xml中的ip、端口、群组号填错或者是缺少keystore.p12和ca.crt证书。
