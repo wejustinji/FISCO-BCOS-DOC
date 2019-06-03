@@ -1,2 +1,4 @@
-language: python
-script: python test.py
+language: shell
+sudo: required
+git: required
+script: git clone https://github.com/WeBankFinTech/webase-front.git
